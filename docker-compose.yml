@@ -1,0 +1,46 @@
+version: "3.0"
+services:
+  sequence-db:
+    build:
+      context: postgres
+      dockerfile: Dockerfile
+    shm_size: '1gb'
+    image: sequence-db:latest
+    container_name: sequence-db-container
+    restart: always
+    ports:
+      - "8051:5432"
+    volumes:
+      - sequence-db:/var/lib/postgresql/data
+    environment:
+      - "POSTGRES_DB=sequence"
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+    networks:
+      - default
+
+  sequence-backend:
+    depends_on:
+      - sequence-db
+    build:
+      context: sequence-backend
+      dockerfile: Dockerfile
+    image: sequence-backend:latest
+    container_name: sequence-backend-container
+    restart: always
+    ports:
+      - "8050:80"
+    environment:
+      - "DB_ENGINE=django.db.backends.postgresql_psycopg2"
+      - "DB_NAME=sequence"
+      - "DB_HOST=sequence-db"
+      - "DB_PORT=5432"
+      - "DB_USER=postgres"
+      - "DB_PASSWORD=postgres"
+      - "DEBUG=True"
+      - "PRODUCTION=False"
+    networks:
+      - default
+
+volumes:
+  sequence-db:

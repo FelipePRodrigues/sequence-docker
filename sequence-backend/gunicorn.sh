@@ -1,0 +1,1 @@
+gunicorn --access-logfile - --workers 10 --timeout 3000 --bind unix:sequence.sock sequence.wsgi:application
