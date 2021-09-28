@@ -2,7 +2,7 @@
 ##### *version 1.0*
 
 ## Description
-This project allows you to run the sequence API through docker-compose.
+This project allows you to run the [sequence API](https://github.com/FelipePRodrigues/sequence-backend) through docker-compose.
 
 ## Requirements
 * Docker
